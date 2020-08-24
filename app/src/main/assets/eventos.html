@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Click2Call Events Sample</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <button onclick='call()'>Call agent</button>
+    <button onclick='hangup()'>Hangup</button>
+    <div id='target'></div>
+
+    <script src='click2call-0.6.0.js'></script>
+
+    <script>
+
+      let sippoUri = 'https://poc.quobis.com';
+      let target = document.getElementById('target');
+      let c2c = new Click2Call(sippoUri, target);
+
+      c2c.on('registered', () => console.log('Event: registered'));
+      c2c.on('deregistered', () => console.log('Event: deregistered'));
+      c2c.on('callEstablished', () => console.log('Event: callEstablished'));
+      c2c.on('callFinished', () => console.log('Event: callFinished'));
+
+      function call() {
+        let anonymousDomain = '@click2call.com';
+        c2c.register(anonymousDomain).then( () => c2c.call('user1@bancoazteca.com'));
+      }
+
+      function hangup() {
+        c2c.hangup().then( () => c2c.deregister());
+      }
+
+    </script>
+  </body>
+</html>
